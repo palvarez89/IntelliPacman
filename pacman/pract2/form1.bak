@@ -1,0 +1,69 @@
+;;; Define :dialogoppal
+ 
+(in-package :common-graphics-user)
+
+;; The finder-function, which returns the window if it already
+;; exists, and otherwise creates and returns it.
+;; Call this function if you need only one copy of this window,
+;; and that window is a non-owned top-level window.
+(defun dialogoppal () (find-or-make-application-window :dialogoppal 'make-dialogoppal))
+ 
+;; The maker-function, which always creates a new window.
+;; Call this function if you need more than one copy,
+;; or the single copy should have a parent or owner window.
+;; (Pass :owner to this function; :parent is for compatibility.)
+(defun make-dialogoppal
+    (&key parent (owner (or parent (screen *system*))) exterior
+     (interior (make-box 432 134 1179 484)) (name :dialogoppal) (title "IntelliPacman")
+     (border :frame) (child-p t) form-p)
+  (let ((owner
+         (make-window name :owner owner
+           :class 'dialog
+           :child-p child-p
+           :exterior exterior
+           :interior interior
+           :border border
+           :close-button t
+           :font (make-font-ex nil "Sans" 9.999683 '(:bold))
+           :form-package-name :common-graphics-user
+           :form-state :normal
+           :maximize-button t
+           :minimize-button nil
+           :name :dialogoppal
+           :pop-up nil
+           :resizable t
+           :scrollbars nil
+           :state :normal
+           :system-menu t
+           :title title
+           :title-bar t
+           :dialog-items (make-dialogoppal-widgets)
+           :form-p form-p
+           :form-package-name :common-graphics-user)))
+    owner))
+
+(defun make-dialogoppal-widgets ()
+  (list (make-instance 'static-text :font (make-font-ex nil "DejaVu Sans Mono" 9.999683)
+                       :height 210 :left 40 :name :paneltab :top 10 :value "" :width 221)
+        (make-instance 'button :available nil :font (make-font-ex nil "Sans" 10 '(:bold))
+                       :height 44 :left 328 :name :button6 :on-change-test nil
+                       :on-double-click 'dialogoppal-button6-on-double-click :title
+                       "Paso" :top 172 :width 124)
+        (make-instance 'button :font (make-font-ex nil "Sans" 10 '(:bold)) :height 44
+                       :left 402 :name :button8 :on-click 'dialogoppal-button8-on-click
+                       :title "Cargar configuración" :top 17 :width 145)
+        (make-instance 'static-text :font (make-font-ex nil "Sans" 10 '(:bold)) :height
+                       38 :left 36 :name :panelinfo :top 263 :value "NO INICIADO" :width
+                       225)
+        (make-instance 'button :available nil :font (make-font-ex nil "Sans" 10 '(:bold))
+                       :height 44 :left 534 :name :button9 :on-double-click
+                       'dialogoppal-button9-on-double-click :title "Porcentaje Ganadas"
+                       :top 110 :width 124)
+        (make-instance 'button :available nil :font (make-font-ex nil "Sans" 10 '(:bold))
+                       :height 44 :left 534 :name :button5 :on-double-click
+                       'dialogoppal-button5-on-double-click :title "Aprender" :top 172
+                       :width 124)
+        (make-instance 'button :available nil :font (make-font-ex nil "Sans" 10 '(:bold))
+                       :height 44 :left 328 :name :button7 :on-double-click
+                       'dialogoppal-button7-on-double-click :title "Reiniciar partida"
+                       :top 110 :width 124)))
